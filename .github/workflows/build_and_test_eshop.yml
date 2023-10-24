@@ -31,7 +31,7 @@ jobs:
 
     Build:
         needs: Install
-        runs-on: ubutu-latest
+        runs-on: ubuntu-latest
         
         steps:
             - name: Code checkout
