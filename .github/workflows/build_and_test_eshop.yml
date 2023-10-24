@@ -1,83 +1,82 @@
-name: Build and Test eshop
+name: Build and tests eshop
 
 on:
-    workflow_dispatch: 
-    push:
+  workflow_dispatch:
+  push:
 
 jobs:
-    Install:
-        runs-on: ubuntu-latest
-        
-        steps:
-            - name: Code checkout
-              uses: actions/checkout@v4.1.1
-              with:
-                token: ${{secrets.WORKFLOW_TOKEN}}
+  Install:
+    runs-on: ubuntu-latest
 
-            - name: Setup NodeJS
-              uses: actions/setup-node@v4.0.0
-              with:
-                node-version: 10
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4.1.1
+        with:
+          token: ${{ secrets.WORKFLOW_TOKEN }}
 
-            - name: Cache node modules
-              uses: actions/cache@v3.3.2
-              with:
-                path: node_modules
-                key: node_modules-${{hashFiles('**/package-lock.json')}}
-                restore-keys: node_modules-
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: 14
 
-            - name: Install packages with npm
-              run: |
-                npm ci
+      - name: Cache node modules
+        uses: actions/cache@v3.3.2
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: node_modules-
 
-    Build:
-        needs: Install
-        runs-on: ubuntu-latest
-        
-        steps:
-            - name: Code checkout
-              uses: actions/checkout@v4.1.1
-              with:
-                token: ${{secrets.WORKFLOW_TOKEN}}
+      - name: Install packages with npm
+        run: |
+          npm ci
 
-            - name: Setup NodeJS
-              uses: actions/setup-node@v4.0.0
-              with:
-                node-version: 10
+  Build:
+    needs: Install
+    runs-on: ubuntu-latest
 
-            - name: Cache node modules
-              uses: actions/cache@v3.3.2
-              with:
-                path: node_modules
-                key: node_modules-${{ hashFiles('**/package-lock.json') }}
-        
-            - name: Build
-              run: |
-                npm rebuild node-sass --force
-                npm run build -- --colors
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4.1.1
+        with:
+          token: ${{ secrets.WORKFLOW_TOKEN }}
 
-    Test:
-        needs: Install
-        runs-on: ubuntu-latest
-        
-        steps:
-            - name: Code checkout
-              uses: actions/checkout@v4.1.1
-              with:
-                token: ${{secrets.WORKFLOW_TOKEN}}
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: 14
 
-            - name: Setup NodeJS
-              uses: actions/setup-node@v4.0.0
-              with:
-                node-version: 10
+      - name: Cache node modules
+        uses: actions/cache@v3.3.2
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
 
-            - name: Cache node modules
-              uses: actions/cache@v3.3.2
-              with:
-                path: node_modules
-                key: node_modules-${{ hashFiles('**/package-lock.json') }}
-          
-            - name: Build
-              run: |
-                npm rebuild node-sass --force
-                npm run build -- --colors
+      - name: Build
+        run: |
+          npm rebuild node-sass --force
+          npm run build -- --colors
+
+  Test:
+    needs: Install
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4.1.1
+        with:
+          token: ${{ secrets.WORKFLOW_TOKEN }}
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: 14
+
+      - name: Cache node modules
+        uses: actions/cache@v3.3.2
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Run tests
+        run: |
+          npm run test -- --colors
