@@ -124,9 +124,9 @@ jobs:
         with:
           playbook: ec2_deploy.yml
         env:
-          access_key: ${{secrets.WORKFLOW_TOKEN}}
-          secret_key: ${{secrets.WORKFLOW_TOKEN}}
-          session_token: ${{secrets.WORKFLOW_TOKEN}}
+          access_key: ${{secrets.ACCESS_KEY}}
+          secret_key: ${{secrets.SECRET_KEY}}
+          session_token: ${{secrets.SEASSION_TOKEN}}
           
           
 
