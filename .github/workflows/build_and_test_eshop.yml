@@ -126,7 +126,8 @@ jobs:
         env:
           ACCESS_KEY: ${{secrets.ACCESS_KEY}}
           SECRET_KEY: ${{secrets.SECRET_KEY}}
-          SEASSION_TOKEN: ${{secrets.SEASSION_TOKEN}}
+          SESSION_TOKEN: ${{secrets.SESSION_TOKEN}}
+          SSH_PRIVATE_KEY: ${{secrets.AWS_TOKEN}}
           
           
 
