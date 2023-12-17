@@ -120,7 +120,7 @@ jobs:
           #FIREBASE_PROJECT: doubrava-devops
 
       - name: Run Ansible Playbook
-        uses: dawidd6/action-ansible-playbook@v2
+        uses: aimerib/ansible-playwright@v2.7.7
         with:
           playbook: ./ansible/ec2_deploy.yml
         env:
