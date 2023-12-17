@@ -119,9 +119,12 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT: doubrava-devops
 
-      - name: Connect to AWS
-        run: |
-          ssh -i "${{secrets.AWS_TOKEN}}" ec2-user@ec2-184-72-93-199.compute-1.amazonaws.com
+      - name: Run playbook
+        uses: aimerib/ansible-playwright@v2.7.7
+        with:
+          playbook: ec2_deploy.yml
+          directory: ./
+          key: ${{secrets.AWS_TOKEN}}
       
           
 
