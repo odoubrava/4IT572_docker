@@ -113,16 +113,16 @@ jobs:
             ./build
           key: ${{runner.os}}-build-${{github.run_id}}
 
-      - name: Deploy to Firebase
-        uses: lowply/deploy-firebase@v0.0.5
-        env:
-          FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
-          FIREBASE_PROJECT: doubrava-devops
+      #- name: Deploy to Firebase
+        #uses: lowply/deploy-firebase@v0.0.5
+        #env:
+          #FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
+          #FIREBASE_PROJECT: doubrava-devops
 
       - name: Run Ansible Playbook
         uses: dawidd6/action-ansible-playbook@v2
         with:
-          playbook: ec2_deploy.yml
+          playbook: ./ansible/ec2_deploy.yml
         env:
           access_key: ${{secrets.ACCESS_KEY}}
           secret_key: ${{secrets.SECRET_KEY}}
