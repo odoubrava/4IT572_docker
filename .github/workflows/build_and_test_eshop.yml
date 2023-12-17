@@ -123,7 +123,7 @@ jobs:
         uses: aimerib/ansible-playwright@v2.7.7
         with:
           playbook: ec2_deploy.yml
-          directory: ~/4IT572_docker
+          directory: ./
           key: ${{secrets.AWS_TOKEN}}
       
           
