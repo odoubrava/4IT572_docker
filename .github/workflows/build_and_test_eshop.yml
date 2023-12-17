@@ -118,5 +118,15 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT: doubrava-devops
+
+      - name: Run playbook
+        uses: aimerib/ansible-playwright@v2.7.7
+        with:
+          playbook: ec2_deploy.yml
+          directory: ~/4IT572_docker
+          key: ${{secrets.AWS_TOKEN}}
+      
+          
+
         
           
