@@ -124,9 +124,9 @@ jobs:
         with:
           playbook: ./ansible/ec2_deploy.yml
         env:
-          access_key: ${{secrets.ACCESS_KEY}}
-          secret_key: ${{secrets.SECRET_KEY}}
-          session_token: ${{secrets.SEASSION_TOKEN}}
+          ACCESS_KEY: ${{secrets.ACCESS_KEY}}
+          SECRET_KEY: ${{secrets.SECRET_KEY}}
+          SEASSION_TOKEN: ${{secrets.SEASSION_TOKEN}}
           
           
 
