@@ -17,7 +17,7 @@
         wait: yes
         aws_access_key: $ACCESS_KEY
         aws_secret_key: $SECRET_KEY
-        security_token: $SEASSION_TOKEN
+        security_token: $SESSION_TOKEN
       register: ec2_instance_result
     
     - name: Add instance host to group
