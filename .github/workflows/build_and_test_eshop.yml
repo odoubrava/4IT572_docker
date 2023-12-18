@@ -122,7 +122,7 @@ jobs:
         uses: aimerib/ansible-playwright@v2.7.7
         with:
           playbook: ec2_deploy.yml
-          directory: ./
+          directory: ./ansible
         env:
           ACCESS_KEY: ${{secrets.ACCESS_KEY}}
           SECRET_KEY: ${{secrets.SECRET_KEY}}
