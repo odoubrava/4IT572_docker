@@ -122,9 +122,10 @@ jobs:
 
       - name: Run Ansible Playbook
         env:
-          ACCESS_KEY: ${{secrets.ACCESS_KEY}}
-          SECRET_KEY: ${{secrets.SECRET_KEY}}
-          SESSION_TOKEN: ${{secrets.SESSION_TOKEN}}
+          ANSIBLE_HOST_KEY_CHECKING: False
+          #ACCESS_KEY: ${{secrets.ACCESS_KEY}}
+          #SECRET_KEY: ${{secrets.SECRET_KEY}}
+          #SESSION_TOKEN: ${{secrets.SESSION_TOKEN}}
           #SSH_PRIVATE_KEY: ${{secrets.AWS_TOKEN}}
         run: |
           chmod 400 test.pem

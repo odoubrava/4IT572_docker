@@ -15,9 +15,9 @@
         network:
           assign_public_ip: yes
         wait: yes
-        aws_access_key: $ACCESS_KEY
-        aws_secret_key: $SECRET_KEY
-        security_token: $SESSION_TOKEN
+        aws_access_key: "{{access_key}}"
+        aws_secret_key: "{{secret_key}}"
+        security_token: "{{session_token}}"
       register: ec2_instance_result
     
     - name: Add instance host to group
