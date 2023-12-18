@@ -26,33 +26,6 @@
       set_fact:
         new_eshop_id: "{{ec2_instance_result.instances[0].instance_id}}"
 
-- name: Remove old EC2 instances
-  hosts: localhost
-  connection: local
-
-  tasks:
-    - name: Get existing eshop instances
-      amazon.aws.ec2_instance_info:
-        aws_access_key: "{{access_key}}"
-        aws_secret_key: "{{secret_key}}"
-        security_token: "{{session_token}}"
-        region: us-east-1
-        filters:
-          instance.group-id: sg-04a653894de498964
-      register: ec2_instance_info_result
-
-    - name: Terminate old instances
-      amazon.aws.ec2_instance:
-        instance_ids: "{{item.instance_id}}"
-        region: us-east-1
-        state: "absent"
-        wait: yes
-        aws_access_key: "{{access_key}}"
-        aws_secret_key: "{{secret_key}}"
-        security_token: "{{session_token}}"
-      with_items: "{{ec2_instance_info_result.instances}}"
-      when: item.instance_id != new_eshop_id
-
     - name: Add instance host to group
       add_host:
         hostname: "{{item.public_ip_address}}"
@@ -105,3 +78,30 @@
     - wait_for:
         port:
           80
+
+- name: Remove old EC2 instances
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: Get all existing eshop instances
+      amazon.aws.ec2_instance_info:
+        aws_access_key: "{{access_key}}"
+        aws_secret_key: "{{secret_key}}"
+        security_token: "{{session_token}}"
+        region: us-east-1
+        filters:
+          instance.group-id: sg-04a653894de498964
+      register: ec2_instance_info_result
+
+    - name: Terminate old instances
+      amazon.aws.ec2_instance:
+        instance_ids: "{{item.instance_id}}"
+        region: us-east-1
+        state: "absent"
+        wait: yes
+        aws_access_key: "{{access_key}}"
+        aws_secret_key: "{{secret_key}}"
+        security_token: "{{session_token}}"
+      with_items: "{{ec2_instance_info_result.instances}}"
+      when: item.instance_id != new_eshop_id
