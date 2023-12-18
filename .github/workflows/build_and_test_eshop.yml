@@ -104,14 +104,22 @@ jobs:
         with:
           token: ${{secrets.WORKFLOW_TOKEN}}
 
-      - name: Load Node modules and build folder
-        uses: actions/cache@v3.3.2
+      - name: Setup Python
+        uses: actions/setup-python@v5.0.0  
         with:
-          path: |
-            ~/.npm
-            ./node_modules
-            ./build
-          key: ${{runner.os}}-build-${{github.run_id}}
+          python-version: '3.10'
+       
+      - name: Install Ansible
+        run: pip3 install boto boto3 ansible
+        
+      #- name: Load Node modules and build folder
+        #uses: actions/cache@v3.3.2
+        #with:
+          #path: |
+            #~/.npm
+            #./node_modules
+            #./build
+          #key: ${{runner.os}}-build-${{github.run_id}}
       
       #- name: Deploy to Firebase
         #uses: lowply/deploy-firebase@v0.0.5
