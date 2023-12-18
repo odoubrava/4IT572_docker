@@ -116,14 +116,17 @@ jobs:
         run: pip3 install ansible boto boto3
 
       - name: Upload secrets
-        run: echo "${{secrets.AWS_TOKEN}}" > test.pem
+        run: |
+          echo "${{secrets.AWS_TOKEN}}" > test.pem
+          echo "${{secrets.ANSIBLE_VAULT_PASS}}" > .vault_pass
 
       - name: Run Ansible Playbook
         env:
-          ACCESS_KEY: ${{secrets.ACCESS_KEY}}
-          SECRET_KEY: ${{secrets.SECRET_KEY}}
-          SESSION_TOKEN: ${{secrets.SESSION_TOKEN}}
+          ANSIBLE_HOST_KEY_CHECKING: False
+          #ACCESS_KEY: ${{secrets.ACCESS_KEY}}
+          #SECRET_KEY: ${{secrets.SECRET_KEY}}
+          #SESSION_TOKEN: ${{secrets.SESSION_TOKEN}}
           #SSH_PRIVATE_KEY: ${{secrets.AWS_TOKEN}}
         run: |
           chmod 400 test.pem
-          ansible-playbook ec2_deploy.yml --user ec2-user --key-file test.pem
+          ansible-playbook ec2_deploy.yml --vault-pass-file .vault_pass --user ec2-user --key-file test.pem
