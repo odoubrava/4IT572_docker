@@ -21,12 +21,10 @@
         aws_secret_key: "{{secret_key}}"
         security_token: "{{session_token}}"
       register: ec2_instance_result
-      set_fact:
-        new_eshop_id: "{{ec2_instance_result.instance_id}}"
 
-    #- name: Save new eshop ID
-      #set_fact:
-        #new_eshop_id: "{{ec2_instance_result.instances[0].instance_id}}"
+    - name: Save new eshop ID
+      set_fact:
+        new_eshop_id: "{{ec2_instance_result.instances[0].instance_id}}"
 
     - name: Add instance host to group
       add_host:
