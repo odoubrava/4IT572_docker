@@ -118,11 +118,11 @@ jobs:
       - name: Upload secrets
         run: |
           echo "${{secrets.AWS_TOKEN}}" > test.pem
-          echo "${{secrets.ANSIBLE_VAULT_PASS}}" > .ansible_vault_pass
+          echo "${{secrets.ANSIBLE_VAULT_PASS}}" > .vault_pass
 
       - name: Run Ansible Playbook
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
         run: |
           chmod 400 test.pem
-          ansible-playbook ec2_deploy.yml --vault-pass-file .ansible_vault_pass --user ec2-user --key-file test.pem
+          ansible-playbook ec2_deploy.yml --vault-pass-file .vault_pass --user ec2-user --key-file test.pem
