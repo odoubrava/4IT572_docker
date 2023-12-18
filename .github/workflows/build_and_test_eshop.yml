@@ -116,7 +116,7 @@ jobs:
         run: pip3 install boto boto3 ansible
 
       - name: Upload secrets
-        run: echo "${{secrets.AWS_TOKEN}}" > devops.pem
+        run: echo "${{secrets.AWS_TOKEN}}" > test.pem
 
       #- name: Load Node modules and build folder
         #uses: actions/cache@v3.3.2
