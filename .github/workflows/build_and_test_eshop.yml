@@ -118,21 +118,6 @@ jobs:
       - name: Upload secrets
         run: echo "${{secrets.AWS_TOKEN}}" > test.pem
 
-      #- name: Load Node modules and build folder
-        #uses: actions/cache@v3.3.2
-        #with:
-          #path: |
-            #~/.npm
-            #./node_modules
-            #./build
-          #key: ${{runner.os}}-build-${{github.run_id}}
-      
-      #- name: Deploy to Firebase
-        #uses: lowply/deploy-firebase@v0.0.5
-        #env:
-          #FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
-          #FIREBASE_PROJECT: doubrava-devops
-
       - name: Run Ansible Playbook
         uses: aimerib/ansible-playwright@v2.7.7
         with:
