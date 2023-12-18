@@ -113,7 +113,7 @@ jobs:
           python-version: '3.11'
        
       - name: Install Ansible
-        run: pip3 install boto boto3 ansible
+        run: pip3 install ansible boto boto3
 
       - name: Upload secrets
         run: echo "${{secrets.AWS_TOKEN}}" > test.pem
