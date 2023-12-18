@@ -97,6 +97,9 @@ jobs:
     needs: [Build, Test]
     if: ${{github.ref == 'refs/heads/master'}}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./asnible
 
     steps:
       - name: Code checkout
@@ -111,7 +114,10 @@ jobs:
        
       - name: Install Ansible
         run: pip3 install boto boto3 ansible
-        
+
+      - name: Upload secrets
+        run: echo "${{secrets.AWS_TOKEN}}" > devops.pem
+
       #- name: Load Node modules and build folder
         #uses: actions/cache@v3.3.2
         #with:
@@ -135,7 +141,7 @@ jobs:
           ACCESS_KEY: ${{secrets.ACCESS_KEY}}
           SECRET_KEY: ${{secrets.SECRET_KEY}}
           SESSION_TOKEN: ${{secrets.SESSION_TOKEN}}
-          SSH_PRIVATE_KEY: ${{secrets.AWS_TOKEN}}
+          #SSH_PRIVATE_KEY: ${{secrets.AWS_TOKEN}}
           
           
 
