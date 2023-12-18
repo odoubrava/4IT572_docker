@@ -113,7 +113,7 @@ jobs:
           python-version: '3.11'
        
       - name: Install Ansible
-        run: pip3 install ansible boto boto3
+        run: pip3 install boto boto3 ansible
 
       - name: Upload secrets
         run: |
@@ -123,10 +123,6 @@ jobs:
       - name: Run Ansible Playbook
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
-          #ACCESS_KEY: ${{secrets.ACCESS_KEY}}
-          #SECRET_KEY: ${{secrets.SECRET_KEY}}
-          #SESSION_TOKEN: ${{secrets.SESSION_TOKEN}}
-          #SSH_PRIVATE_KEY: ${{secrets.AWS_TOKEN}}
         run: |
           chmod 400 test.pem
           ansible-playbook ec2_deploy.yml --vault-pass-file .vault_pass --user ec2-user --key-file test.pem

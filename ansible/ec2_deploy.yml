@@ -3,79 +3,106 @@
   connection: local
 
   tasks:
-    - name: Launch EC2 Instance
+    - name: Launch EC2 instance
       ec2_instance:
         instance_type: t2.medium
         image_id: ami-0230bd60aa48260c6
         region: us-east-1
         key_name: test
         vpc_subnet_id: subnet-0dfd81f98f07f572e
-        count: 1
-        security_group: eshop
         network:
           assign_public_ip: yes
         wait: yes
+        tags:
+          Name: Eshop
+        count: 1
+        security_group: eshop
         aws_access_key: "{{access_key}}"
         aws_secret_key: "{{secret_key}}"
         security_token: "{{session_token}}"
       register: ec2_instance_result
-    
+
+    - name: Save new eshop ID
+      set_fact:
+        new_eshop_id: "{{ec2_instance_result.instances[0].instance_id}}"
+
     - name: Add instance host to group
       add_host:
         hostname: "{{item.public_ip_address}}"
         groupname: launched
       loop: "{{ec2_instance_result.instances}}"
 
-    - name: Wait for SSH connections
-      delegate_to: "{{item.public_ip_address}}"
+    - name: Wait for SSH connection
+      delegate_to: "{{item.public_dns_name}}"
       wait_for_connection:
         delay: 30
         timeout: 300
       loop: "{{ec2_instance_result.instances}}"
 
-- name: Configure EC2
+- name: Remove old EC2 instances
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - name: Get existing eshop instances
+      amazon.aws.ec2_instance_info:
+        aws_access_key: "{{access_key}}"
+        aws_secret_key: "{{secret_key}}"
+        security_token: "{{session_token}}"
+        region: us-east-1
+        filters:
+          instance.group-id: sg-04a653894de498964
+      register: ec2_instance_info_result
+
+    - name: Terminate old instances
+      amazon.aws.ec2_instance:
+        instance_ids: "{{item.instance_id}}"
+        region: us-east-1
+        state: "absent"
+        wait: yes
+        aws_access_key: "{{access_key}}"
+        aws_secret_key: "{{secret_key}}"
+        security_token: "{{session_token}}"
+      with_items: "{{ec2_instance_info_result.instances}}"
+      when: item.instance_id != new_eshop_id
+
+
+- name: Configure new EC2
   hosts: launched
   connection: ssh
 
   tasks:
-    - name: Install git
+    - name: Install Git and Docker
       yum:
         name:
-          - git
           - docker
+          - git
         state: latest
         update_cache: yes
       become: yes
-    
     - service:
         name: docker
         state: started
         enabled: yes
       become: yes
-    
     - name: Start Docker on startup
       shell: systemctl enable docker
       become: yes
-    
-    - name: Set rights to Docker
+    - name: Set rights to docker
       shell: usermod -a -G docker ec2-user
       become: yes
-    
-    - name: Get eshop from GIT
+    - name: Get project files from git
       git:
-        repo: 'https://github.com/odoubrava/4IT572_docker.git'
+        repo: "https://github.com/odoubrava/4IT572_docker.git"
         dest: ./app
-    
-    - name: Builed Docker with eshop
+    - name: Build docker with eshop
       shell: cd app && docker build -t myeshop:latest .
       become: yes
-
     - name: Run Docker with eshop
       shell: docker run -p 80:3000 myeshop
       async: 45
       poll: 0
       become: yes
-
     - wait_for:
         port:
           80
